@@ -1,0 +1,47 @@
+{% extends 'base_bootstrap.html' %}
+{% load app_tags %} <!-- see home/templatetags/app_tags.py and dj4e-samples/settings.py -->
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-radius:10px !important">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">{{ settings.APP_NAME }}</a>
+    <ul class="navbar-nav">
+      <!-- For the Ads Application-->
+      <li><a class="nav-link" href="{% url 'ads:all' %}" role="button">Ads CRUD</a></li>
+      <!-- For the Cats Application-->
+      <li><a class="nav-link" href="{% url 'cats:all' %}" role="button">Cats CRUD</a></li>
+      <!-- For the Polls Application-->
+      <li><a class="nav-link" href="{% url 'polls:all' %}" role="button">Polls</a></li>
+      <!-- For the Autos application-->
+      <li><a class="nav-link" href="{% url 'autos:all' %}" role="button">Autos CRUD</a></li>
+    </ul>
+    <ul class="navbar-nav">
+      {% url 'ads:all' as x %}
+      {% url 'cats:all' as y %}
+      {% if request.get_full_path == x %}
+        <li>
+          <a class="nav-link" href="{% url 'ads:ad_create' %}">Create Ad</a>
+        </li>
+      {% elif request.get_full_path == y %}
+        <li>
+          <a class="nav-link" href="{% url 'cats:cat_create' %}">Create Cat</a>
+        </li>
+        <li>
+          <a class="nav-link" href="{% url 'cats:breed_create' %}">Create Breed</a>
+        </li>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="rightnavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img style="width: 25px;" src="{{ user|gravatar:60 }}"/><b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="rightnavDropdown">
+            <li><a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
+        </ul>
+        </li>
+      {% else %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
+       {% endif %}
+    </ul>
+  </div>
+</nav>
+{% endblock %}
